@@ -11,7 +11,7 @@
 set -e
 
 VERSION_INPUT=$1
-CURRENT_VERSION=''
+CURRENT_VERSION=""
 
 suggest_version() {
   local CURRENT_VERSION
