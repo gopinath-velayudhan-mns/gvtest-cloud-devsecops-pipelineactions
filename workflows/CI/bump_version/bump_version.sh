@@ -10,14 +10,15 @@
 
 set -e
 
-VERSION_FILE=$1
+VERSION_INPUT=$1
+CURRENT_VERSION=''
 
 suggest_version() {
   local CURRENT_VERSION
   local CURRENT_MAJOR
   local CURRENT_MINOR
   local CURRENT_PATCH
-  CURRENT_VERSION=`cat ${VERSION_FILE}`
+  #CURRENT_VERSION=`echo ${VERSION}`
   BASE_LIST=(`echo $CURRENT_VERSION | tr '.' ' '`)
   #CURRENT_MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
   #CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
@@ -54,7 +55,8 @@ push_tags() {
   #git push origin --tags
 }
 
-
+IN_TYPE="$(echo "VERSION_INPUT" | cut -d'_' -f1)"
+IN_VALUE="$(echo "VERSION_INPUT" | cut -d'_' -f2)"
 
 if [ -f $VERSION_FILE ]; then
   SUGGESTED_VERSION=$(suggest_version)
