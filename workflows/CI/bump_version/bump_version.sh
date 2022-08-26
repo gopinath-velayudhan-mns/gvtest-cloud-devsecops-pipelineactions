@@ -19,6 +19,7 @@ suggest_version() {
   local CURRENT_MINOR
   local CURRENT_PATCH
   #CURRENT_VERSION=`cat ${VERSION_FILE}`
+  
   BASE_LIST=(`echo $CURRENT_VERSION | tr '.' ' '`)
   #CURRENT_MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
   #CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
@@ -59,19 +60,31 @@ IN_TYPE="$(echo "VERSION_INPUT" | cut -d'_' -f1)"
 IN_VALUE="$(echo "VERSION_INPUT" | cut -d'_' -f2)"
 
 if [ IN_TYPE == 'file' ]; then
-	VERSION_FILE=${IN_VALUE}
-	if [ -f $VERSION_FILE ]; then
-	  CURRENT_VERSION=`cat ${VERSION_FILE}`
-	  SUGGESTED_VERSION=$(suggest_version)
-
-	  echo "Current version: $(cat ${VERSION_FILE})"
-	  echo "next version: $SUGGESTED_VERSION"
-	  NEW_VERSION=""
-
-	  if [ "$NEW_VERSION" = "" ]; then NEW_VERSION=$SUGGESTED_VERSION; fi
+   VERSION_FILE=${IN_VALUE}
+   if [ -f $VERSION_FILE ]; then
+      CURRENT_VERSION=`cat ${VERSION_FILE}`
+      SUGGESTED_VERSION=$(suggest_version)
+      echo "Current version: $(cat ${VERSION_FILE})"
+      echo "next version: $SUGGESTED_VERSION"
+      NEW_VERSION=""
+         if [ "$NEW_VERSION" = "" ]; then NEW_VERSION=$SUGGESTED_VERSION; fi
 	  echo "Will set new version to be $NEW_VERSION"
 	  update_version "$NEW_VERSION"
 	  push_tags "$NEW_VERSION"
-	else
+    else
 	  echo "Could not find a $VERSION_FILE file."
-	fi
+    fi
+fi
+
+if [ IN_TYPE == 'version' ]; then
+   VERSION_VAL=${IN_VALUE}
+   CURRENT_VERSION=`echo ${VERSION_FILE}`
+   SUGGESTED_VERSION=$(suggest_version)
+   echo "Current version: $(cat ${VERSION_FILE})"
+   echo "next version: $SUGGESTED_VERSION"
+   NEW_VERSION=""
+   if [ "$NEW_VERSION" = "" ]; then NEW_VERSION=$SUGGESTED_VERSION; fi
+   echo "Will set new version to be $NEW_VERSION"
+   update_version "$NEW_VERSION"
+   push_tags "$NEW_VERSION"
+fi
