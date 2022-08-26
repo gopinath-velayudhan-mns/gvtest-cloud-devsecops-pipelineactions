@@ -13,12 +13,12 @@ runs:
   using: "composite"
   steps:
     - name: run script to bump version file provided
-      run: ${{ github.action_path }}/bump_version_file.sh ${{inputs.version_file}}
+      run: ${{ github.action_path }}/bump_version.sh "file=${{inputs.version_file}}"
       shell: bash
       if ${{version_file}}
       
     - name: run script to bump version file provided
-      run: ${{ github.action_path }}/bump_version.sh ${{inputs.version}}
+      run: ${{ github.action_path }}/bump_version.sh "version=${{inputs.version}}"
       shell: bash
       if ${{version}}  
       
